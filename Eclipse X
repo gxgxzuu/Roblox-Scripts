@@ -1,0 +1,340 @@
+--// ECLIPSE X V11
+--// Modern Neon UI Framework
+--// Mobile Friendly Visual GUI
+
+local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
+
+-- GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "EclipseX_V11"
+gui.Parent = game.CoreGui
+gui.ResetOnSpawn = false
+
+-- MAIN
+local main = Instance.new("Frame")
+main.Parent = gui
+main.Size = UDim2.new(0,950,0,520)
+main.Position = UDim2.new(0.5,-475,0.5,-260)
+main.BackgroundColor3 = Color3.fromRGB(8,8,12)
+main.BorderSizePixel = 0
+
+Instance.new("UICorner",main).CornerRadius = UDim.new(0,24)
+
+local stroke = Instance.new("UIStroke")
+stroke.Parent = main
+stroke.Color = Color3.fromRGB(140,0,255)
+stroke.Thickness = 2
+
+local gradient = Instance.new("UIGradient")
+gradient.Parent = main
+gradient.Rotation = 90
+gradient.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0,Color3.fromRGB(16,16,24)),
+	ColorSequenceKeypoint.new(1,Color3.fromRGB(8,8,12))
+}
+
+-- GLOW
+local glow = Instance.new("ImageLabel")
+glow.Parent = main
+glow.BackgroundTransparency = 1
+glow.Image = "rbxassetid://5028857084"
+glow.ImageColor3 = Color3.fromRGB(140,0,255)
+glow.ScaleType = Enum.ScaleType.Slice
+glow.SliceCenter = Rect.new(24,24,276,276)
+glow.Size = UDim2.new(1,50,1,50)
+glow.Position = UDim2.new(0,-25,0,-25)
+glow.ImageTransparency = 0.4
+glow.ZIndex = 0
+
+-- TOPBAR
+local top = Instance.new("Frame")
+top.Parent = main
+top.Size = UDim2.new(1,0,0,70)
+top.BackgroundColor3 = Color3.fromRGB(14,14,18)
+top.BorderSizePixel = 0
+
+Instance.new("UICorner",top).CornerRadius = UDim.new(0,24)
+
+local topFix = Instance.new("Frame")
+topFix.Parent = top
+topFix.Size = UDim2.new(1,0,0,30)
+topFix.Position = UDim2.new(0,0,1,-30)
+topFix.BackgroundColor3 = top.BackgroundColor3
+topFix.BorderSizePixel = 0
+
+-- TITLE
+local title = Instance.new("TextLabel")
+title.Parent = top
+title.BackgroundTransparency = 1
+title.Position = UDim2.new(0,20,0,0)
+title.Size = UDim2.new(0,200,1,0)
+title.Text = "ECLIPSE X"
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 28
+title.TextColor3 = Color3.new(1,1,1)
+title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- BUTTON CREATOR
+local function makeTopButton(text, posX, color)
+
+	local btn = Instance.new("TextButton")
+	btn.Parent = top
+	btn.Size = UDim2.new(0,120,0,46)
+	btn.Position = UDim2.new(0,posX,0.5,-23)
+	btn.BackgroundColor3 = color
+	btn.Text = text
+	btn.Font = Enum.Font.GothamBold
+	btn.TextSize = 16
+	btn.TextColor3 = Color3.new(1,1,1)
+	btn.BorderSizePixel = 0
+	btn.AutoButtonColor = false
+
+	Instance.new("UICorner",btn).CornerRadius = UDim.new(0,18)
+
+	local grad = Instance.new("UIGradient")
+	grad.Parent = btn
+	grad.Rotation = 90
+	grad.Color = ColorSequence.new{
+		ColorSequenceKeypoint.new(0,color:Lerp(Color3.new(1,1,1),0.15)),
+		ColorSequenceKeypoint.new(1,color)
+	}
+
+	local s = Instance.new("UIStroke")
+	s.Parent = btn
+	s.Color = Color3.new(1,1,1)
+	s.Transparency = 0.8
+	s.Thickness = 1
+
+	btn.MouseButton1Down:Connect(function()
+
+		TweenService:Create(
+			btn,
+			TweenInfo.new(0.08),
+			{
+				Size = UDim2.new(0,114,0,42)
+			}
+		):Play()
+	end)
+
+	btn.MouseButton1Up:Connect(function()
+
+		TweenService:Create(
+			btn,
+			TweenInfo.new(0.08),
+			{
+				Size = UDim2.new(0,120,0,46)
+			}
+		):Play()
+	end)
+
+	return btn
+end
+
+-- TOP BUTTONS
+local newTabBtn = makeTopButton(
+	"New Tab",
+	220,
+	Color3.fromRGB(140,0,255)
+)
+
+local saveBtn = makeTopButton(
+	"Save",
+	355,
+	Color3.fromRGB(0,210,120)
+)
+
+local injectBtn = makeTopButton(
+	"Inject",
+	490,
+	Color3.fromRGB(0,170,255)
+)
+
+local clearBtn = makeTopButton(
+	"Clear",
+	625,
+	Color3.fromRGB(255,180,0)
+)
+
+local minimizeBtn = makeTopButton(
+	"Minimize",
+	760,
+	Color3.fromRGB(70,70,80)
+)
+
+local closeBtn = makeTopButton(
+	"Close",
+	895,
+	Color3.fromRGB(255,70,70)
+)
+
+-- TAB HOLDER
+local tabHolder = Instance.new("ScrollingFrame")
+tabHolder.Parent = main
+tabHolder.Position = UDim2.new(0,20,0,90)
+tabHolder.Size = UDim2.new(1,-40,0,50)
+tabHolder.BackgroundTransparency = 1
+tabHolder.ScrollBarThickness = 0
+tabHolder.CanvasSize = UDim2.new(0,0,0,0)
+
+-- EDITOR
+local editor = Instance.new("TextBox")
+editor.Parent = main
+editor.Position = UDim2.new(0,20,0,155)
+editor.Size = UDim2.new(1,-40,1,-230)
+editor.BackgroundColor3 = Color3.fromRGB(14,14,20)
+editor.ClearTextOnFocus = false
+editor.MultiLine = true
+editor.TextXAlignment = Enum.TextXAlignment.Left
+editor.TextYAlignment = Enum.TextYAlignment.Top
+editor.TextColor3 = Color3.new(1,1,1)
+editor.PlaceholderText = "-- Eclipse X Editor"
+editor.PlaceholderColor3 = Color3.fromRGB(120,120,130)
+editor.Font = Enum.Font.Code
+editor.TextSize = 18
+editor.Text = ""
+editor.BorderSizePixel = 0
+
+Instance.new("UICorner",editor).CornerRadius = UDim.new(0,20)
+
+local editorStroke = Instance.new("UIStroke")
+editorStroke.Parent = editor
+editorStroke.Color = Color3.fromRGB(40,40,55)
+
+-- EXECUTE BUTTON STYLE ONLY
+local executeBtn = Instance.new("TextButton")
+executeBtn.Parent = main
+executeBtn.Position = UDim2.new(0,20,1,-60)
+executeBtn.Size = UDim2.new(1,-40,0,45)
+executeBtn.BackgroundColor3 = Color3.fromRGB(140,0,255)
+executeBtn.Text = "EXECUTE"
+executeBtn.Font = Enum.Font.GothamBlack
+executeBtn.TextSize = 22
+executeBtn.TextColor3 = Color3.new(1,1,1)
+executeBtn.BorderSizePixel = 0
+
+Instance.new("UICorner",executeBtn).CornerRadius = UDim.new(0,18)
+
+local execGrad = Instance.new("UIGradient")
+execGrad.Parent = executeBtn
+execGrad.Rotation = 90
+execGrad.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0,Color3.fromRGB(190,0,255)),
+	ColorSequenceKeypoint.new(1,Color3.fromRGB(120,0,255))
+}
+
+-- TAB SYSTEM
+local tabCount = 0
+
+local function createTab()
+
+	tabCount += 1
+
+	local tab = Instance.new("TextButton")
+	tab.Parent = tabHolder
+	tab.Size = UDim2.new(0,140,0,42)
+	tab.Position = UDim2.new(0,(tabCount-1)*150,0,4)
+	tab.BackgroundColor3 = Color3.fromRGB(22,22,30)
+	tab.Text = "Tab "..tabCount
+	tab.Font = Enum.Font.GothamBold
+	tab.TextSize = 15
+	tab.TextColor3 = Color3.new(1,1,1)
+	tab.BorderSizePixel = 0
+
+	Instance.new("UICorner",tab).CornerRadius = UDim.new(0,16)
+
+	local tabGrad = Instance.new("UIGradient")
+	tabGrad.Parent = tab
+	tabGrad.Rotation = 90
+	tabGrad.Color = ColorSequence.new{
+		ColorSequenceKeypoint.new(0,Color3.fromRGB(40,40,55)),
+		ColorSequenceKeypoint.new(1,Color3.fromRGB(22,22,30))
+	}
+
+	tabHolder.CanvasSize = UDim2.new(0,tabCount*150,0,0)
+end
+
+-- START TAB
+createTab()
+
+-- ADD TAB
+newTabBtn.MouseButton1Click:Connect(function()
+	createTab()
+end)
+
+-- MINIMIZE
+local floating = Instance.new("TextButton")
+floating.Parent = gui
+floating.Size = UDim2.new(0,65,0,65)
+floating.Position = UDim2.new(0,25,0.5,-32)
+floating.BackgroundColor3 = Color3.fromRGB(140,0,255)
+floating.Text = "E"
+floating.Font = Enum.Font.GothamBlack
+floating.TextSize = 30
+floating.TextColor3 = Color3.new(1,1,1)
+floating.Visible = false
+floating.BorderSizePixel = 0
+
+Instance.new("UICorner",floating).CornerRadius = UDim.new(1,0)
+
+minimizeBtn.MouseButton1Click:Connect(function()
+
+	main.Visible = false
+	floating.Visible = true
+end)
+
+floating.MouseButton1Click:Connect(function()
+
+	main.Visible = true
+	floating.Visible = false
+end)
+
+-- CLOSE
+closeBtn.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
+-- MOBILE DRAGGING
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+top.InputBegan:Connect(function(input)
+
+	if input.UserInputType == Enum.UserInputType.Touch then
+
+		dragging = true
+		dragStart = input.Position
+		startPos = main.Position
+
+		input.Changed:Connect(function()
+
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+top.InputChanged:Connect(function(input)
+
+	if input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+
+	if input == dragInput and dragging then
+
+		local delta = input.Position - dragStart
+
+		main.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
+end)
